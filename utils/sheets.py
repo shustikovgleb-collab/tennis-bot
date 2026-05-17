@@ -30,7 +30,10 @@ HEADERS = [
 
 
 def get_sheet():
-    creds_dict = json.loads(GOOGLE_CREDENTIALS_JSON)
+    import re
+    raw = GOOGLE_CREDENTIALS_JSON
+    raw = raw.strip('"').replace('\\"', '"').replace('\\\\n', '\\n')
+    creds_dict = json.loads(raw)
     creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
     client = gspread.authorize(creds)
     spreadsheet = client.open_by_key(SPREADSHEET_ID)
